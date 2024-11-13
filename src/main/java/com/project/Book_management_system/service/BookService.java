@@ -27,6 +27,25 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
+    public Book createBook(Book book) {
+        return bookRepository.save(book);
+    }
+    
+    public Optional<Book> updateBook(Long id, Book bookDetails) {
+        Optional<Book> book = bookRepository.findById(id);
+        
+        if (book.isPresent()) {
+            Book existingBook = book.get();
+            existingBook.setTitle(bookDetails.getTitle());
+            existingBook.setAuthor(bookDetails.getAuthor());
+            existingBook.setIsbn(bookDetails.getIsbn());
+            existingBook.setPublicationYear(bookDetails.getPublicationYear());
+            return Optional.of(bookRepository.save(existingBook));
+        }
+        
+        return Optional.empty();
+    }
+
     public boolean deleteBook(Long id) {
         if (bookRepository.existsById(id)) {
             bookRepository.deleteById(id);
